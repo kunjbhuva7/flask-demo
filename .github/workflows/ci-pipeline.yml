@@ -1,0 +1,93 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Simulate Docker Build
+        run: |
+          echo "----------------------------------------"
+          echo "Simulating Docker build..."
+          echo "docker build -t kunj22/flask-demo:${GITHUB_RUN_NUMBER} ."
+          echo "----------------------------------------"
+
+      - name: Simulate Trivy Scan
+        run: |
+          echo "----------------------------------------"
+          echo "Simulating Trivy scan..."
+          echo "trivy image kunj22/flask-demo:${GITHUB_RUN_NUMBER}"
+          echo "----------------------------------------"
+
+      - name: Simulate Docker Push
+        run: |
+          echo "----------------------------------------"
+          echo "Simulating Docker push..."
+          echo "docker push kunj22/flask-demo:${GITHUB_RUN_NUMBER}"
+          echo "----------------------------------------"
+
+      - name: Simulate Kubernetes Deploy
+        run: |
+          echo "----------------------------------------"
+          echo "Simulating kubectl apply -f deployment.yaml"
+          echo "----------------------------------------"
+
+      # ✅ Success Email
+      - name: Send Success Email
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USER }}
+          password: ${{ secrets.SMTP_PASS }}
+          subject: "✅ GitHub Actions Pipeline Success - ${{ github.workflow }}"
+          body: |
+            <html>
+            <body style="font-family: Arial, sans-serif; background-color: #f2f2f2; padding: 20px;">
+                <div style="background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
+                    <h2 style="color: green;">Pipeline Succeeded!</h2>
+                    <p><strong>Workflow:</strong> ${{ github.workflow }}</p>
+                    <p><strong>Run Number:</strong> ${{ github.run_number }}</p>
+                    <p>Check the <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">Actions logs</a> for more details.</p>
+                </div>
+            </body>
+            </html>
+          to: your_email@gmail.com
+          from: your_email@gmail.com
+          content_type: text/html
+
+      # ❌ Failure Email
+      - name: Send Failure Email
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USER }}
+          password: ${{ secrets.SMTP_PASS }}
+          subject: "❌ GitHub Actions Pipeline Failed - ${{ github.workflow }}"
+          body: |
+            <html>
+            <body style="font-family: Arial, sans-serif; background-color: #f2f2f2; padding: 20px;">
+                <div style="background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
+                    <h2 style="color: red;">Pipeline Failed!</h2>
+                    <p><strong>Workflow:</strong> ${{ github.workflow }}</p>
+                    <p><strong>Run Number:</strong> ${{ github.run_number }}</p>
+                    <p>Check the <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">Actions logs</a> for details.</p>
+                </div>
+            </body>
+            </html>
+          to: your_email@gmail.com
+          from: your_email@gmail.com
+          content_type: text/html
+
