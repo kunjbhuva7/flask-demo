@@ -34,7 +34,7 @@ jobs:
           echo "Deploying to cluster..."
           sleep 2
 
-      # ✅ SUCCESS EMAIL (Fixed with html_body)
+      # ✅ SUCCESS EMAIL (Simple Text)
       - name: Send Success Email
         if: success()
         uses: dawidd6/action-send-mail@v3
@@ -47,77 +47,9 @@ jobs:
           subject: "✅ Pipeline Success - ${{ github.repository }}"
           to: kunjbhuva301@gmail.com
           from: kunjbhuva.me@gmail.com
-          html_body: |
-            <!DOCTYPE html>
-            <html>
-            <head>
-              <meta charset="UTF-8">
-              <style>
-                body {
-                  font-family: Arial, sans-serif;
-                  background-color: #f5f5f5;
-                  margin: 0;
-                  padding: 20px;
-                }
-                .container {
-                  max-width: 600px;
-                  margin: 0 auto;
-                  background: white;
-                  padding: 20px;
-                  border-radius: 8px;
-                  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-                }
-                .success-bar {
-                  background-color: #28a745;
-                  color: white;
-                  padding: 10px;
-                  text-align: center;
-                  font-size: 16px;
-                  border-radius: 4px 4px 0 0;
-                }
-                .content {
-                  padding: 20px;
-                  text-align: center;
-                }
-                h1 {
-                  color: #333;
-                  font-size: 18px;
-                  margin: 0 0 10px;
-                }
-                p {
-                  color: #666;
-                  font-size: 14px;
-                  margin: 10px 0;
-                }
-                a.button {
-                  display: inline-block;
-                  background-color: #007bff;
-                  color: white;
-                  padding: 10px 20px;
-                  text-decoration: none;
-                  border-radius: 5px;
-                  font-size: 14px;
-                  font-weight: bold;
-                }
-                a.button:hover {
-                  background-color: #0056b3;
-                }
-              </style>
-            </head>
-            <body>
-              <div class="container">
-                <div class="success-bar">Success! Something good happened.</div>
-                <div class="content">
-                  <h1>Hi Ringo,</h1>
-                  <p>Congratulations! Something good has happened.</p>
-                  <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" class="button">Take Action Now</a>
-                  <p>Thanks for being a great customer. Let it be!</p>
-                </div>
-              </div>
-            </body>
-            </html>
+          body: "Successfully completed!"
 
-      # ❌ FAILURE EMAIL (Unchanged)
+      # ❌ FAILURE EMAIL (Simple Text)
       - name: Send Failure Email
         if: failure()
         uses: dawidd6/action-send-mail@v3
@@ -130,56 +62,4 @@ jobs:
           subject: "❌ Pipeline Failed - ${{ github.repository }}"
           to: kunjbhuva301@gmail.com
           from: kunjbhuva.me@gmail.com
-          html_body: |
-            <!DOCTYPE html>
-            <html>
-            <head>
-              <style>
-                body {
-                  background: linear-gradient(135deg, #ff416c, #ff4b2b);
-                  font-family: Arial, sans-serif;
-                  color: #fff;
-                  text-align: center;
-                  padding: 40px;
-                }
-                .box {
-                  background: rgba(255,255,255,0.1);
-                  padding: 30px;
-                  border-radius: 12px;
-                  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-                  display: inline-block;
-                  animation: shake 0.8s ease;
-                }
-                @keyframes shake {
-                  0%,100%{transform:translateX(0);}
-                  25%{transform:translateX(-6px);}
-                  75%{transform:translateX(6px);}
-                }
-                h1 {
-                  font-size: 28px;
-                  margin-bottom: 10px;
-                }
-                a {
-                  background: white;
-                  color: #ff416c;
-                  padding: 10px 20px;
-                  border-radius: 8px;
-                  text-decoration: none;
-                  font-weight: bold;
-                  display: inline-block;
-                  margin-top: 15px;
-                }
-                a:hover {
-                  background: #ff416c;
-                  color: white;
-                }
-              </style>
-            </head>
-            <body>
-              <div class="box">
-                <h1>⚠️ Pipeline Failed!</h1>
-                <p>Some steps did not complete successfully.</p>
-                <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Logs</a>
-              </div>
-            </body>
-            </html>
+          body: "Pipeline failed. Please check the logs."
