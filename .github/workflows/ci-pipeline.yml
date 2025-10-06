@@ -34,7 +34,7 @@ jobs:
           echo "Deploying to cluster..."
           sleep 2
 
-      # ✅ SUCCESS EMAIL (New Design Based on Image)
+      # ✅ SUCCESS EMAIL (Fixed with html_body)
       - name: Send Success Email
         if: success()
         uses: dawidd6/action-send-mail@v3
@@ -47,8 +47,7 @@ jobs:
           subject: "✅ Pipeline Success - ${{ github.repository }}"
           to: kunjbhuva301@gmail.com
           from: kunjbhuva.me@gmail.com
-          content_type: text/html
-          body: |
+          html_body: |
             <!DOCTYPE html>
             <html>
             <head>
@@ -131,8 +130,7 @@ jobs:
           subject: "❌ Pipeline Failed - ${{ github.repository }}"
           to: kunjbhuva301@gmail.com
           from: kunjbhuva.me@gmail.com
-          content_type: text/html
-          body: |
+          html_body: |
             <!DOCTYPE html>
             <html>
             <head>
