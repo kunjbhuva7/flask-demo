@@ -34,13 +34,13 @@ jobs:
           echo "Deploying to cluster..."
           sleep 2
 
-      # ✅ SUCCESS EMAIL (Simple Text)
+      # ✅ SUCCESS EMAIL (Updated Port to 465)
       - name: Send Success Email
         if: success()
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
-          server_port: 587
+          server_port: 465
           secure: true
           username: ${{ secrets.SMTP_USER }}
           password: ${{ secrets.SMTP_PASS }}
@@ -49,13 +49,13 @@ jobs:
           from: kunjbhuva.me@gmail.com
           body: "Successfully completed!"
 
-      # ❌ FAILURE EMAIL (Simple Text)
+      # ❌ FAILURE EMAIL (Updated Port to 465)
       - name: Send Failure Email
         if: failure()
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
-          server_port: 587
+          server_port: 465
           secure: true
           username: ${{ secrets.SMTP_USER }}
           password: ${{ secrets.SMTP_PASS }}
