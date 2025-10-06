@@ -16,8 +16,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
 		sh '''
-		docker run --rm -v $(pwd):/app -w /app docker:20.10.24-dind \
-		sh -c "docker build -t kunj22/flask-demo:$BUILD_NUMBER ."
+		docker run --rm --privileged -v $(pwd):/app -w /app docker:20.10.24-dind \
+		sh -c "dockerd-entrypoint.sh & sleep 5; docker build -t kunj22/flask-demo:$BUILD_NUMBER ."
 		'''
             }
         }
