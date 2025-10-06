@@ -69,7 +69,7 @@ pipeline {
             // HTML email on success
             emailext(
                 subject: "🎉 Jenkins Pipeline Success: Build #${BUILD_NUMBER}",
-                to: "kunjbhuva301@gmail.com",
+                to: "${RECIPIENT_EMAIL}",
                 mimeType: 'text/html',
                 body: """
                 <html>
