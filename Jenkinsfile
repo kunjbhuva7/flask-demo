@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKERHUB_USER = 'kunj22'
         IMAGE_NAME = 'flask-demo'
+        BUILD_NUMBER = "${env.BUILD_NUMBER}"
     }
 
     stages {
@@ -13,58 +14,58 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build Docker Image (Simulated)') {
             steps {
                 sh '''
-                # Run DinD container in background
-                docker run --rm --privileged --name dind-temp -d docker:20.10.24-dind
-                echo "Waiting for Docker daemon to start..."
-                sleep 10
-
-                # Copy current code to DinD container
-                docker cp . dind-temp:/app
-
-                # Build Docker image inside DinD container
-                docker exec dind-temp docker build -t $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER /app
-
-                # Stop DinD container
-                docker stop dind-temp || true
+                echo "----------------------------------------"
+                echo "Simulating Docker build..."
+                echo "docker build -t $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER ."
+                echo "----------------------------------------"
                 '''
             }
         }
 
-        stage('Scan with Trivy') {
+        stage('Scan with Trivy (Simulated)') {
             steps {
                 sh '''
-                # Optional: Run Trivy inside a container
-                docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER || true
+                echo "----------------------------------------"
+                echo "Simulating Trivy scan on $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER"
+                echo "trivy image $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER"
+                echo "----------------------------------------"
                 '''
             }
         }
 
-        stage('Push to DockerHub') {
+        stage('Push to DockerHub (Simulated)') {
             steps {
                 withCredentials([string(credentialsId: 'dockerhub-pass', variable: 'DOCKER_PASS')]) {
                     sh '''
-                    echo $DOCKER_PASS | docker login -u $DOCKERHUB_USER --password-stdin
-                    docker push $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER
-                    docker tag $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER $DOCKERHUB_USER/$IMAGE_NAME:latest
-                    docker push $DOCKERHUB_USER/$IMAGE_NAME:latest
+                    echo "----------------------------------------"
+                    echo "Simulating Docker login..."
+                    echo "docker login -u $DOCKERHUB_USER --password-stdin"
+                    echo "Simulating docker push $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER"
+                    echo "Simulating docker tag $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER $DOCKERHUB_USER/$IMAGE_NAME:latest"
+                    echo "Simulating docker push latest"
+                    echo "----------------------------------------"
                     '''
                 }
             }
         }
 
-        stage('Deploy to Kubernetes') {
+        stage('Deploy to Kubernetes (Simulated)') {
             steps {
-                sh 'kubectl apply -f deployment.yaml'
+                sh '''
+                echo "----------------------------------------"
+                echo "Simulating kubectl apply -f deployment.yaml"
+                echo "----------------------------------------"
+                '''
             }
         }
     }
 
     post {
         success {
-            echo '✅ Pipeline executed successfully!'
+            echo '✅ Pipeline executed successfully (simulated)!'
         }
         failure {
             echo '❌ Pipeline failed!'
