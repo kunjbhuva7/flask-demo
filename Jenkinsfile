@@ -15,7 +15,10 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER .'
+		sh '''
+		docker run --rm -v $(pwd):/app -w /app docker:20.10.24-dind \
+		sh -c "docker build -t kunj22/flask-demo:$BUILD_NUMBER ."
+		'''
             }
         }
 
