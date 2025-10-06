@@ -41,7 +41,7 @@ jobs:
           echo "Simulating kubectl apply -f deployment.yaml"
           echo "----------------------------------------"
 
-      # ✅ Success Email
+      # ✅ Success Email (Animated 3D Design)
       - name: Send Success Email
         if: success()
         uses: dawidd6/action-send-mail@v3
@@ -50,23 +50,102 @@ jobs:
           server_port: 587
           username: ${{ secrets.SMTP_USER }}
           password: ${{ secrets.SMTP_PASS }}
-          subject: "✅ GitHub Actions Pipeline Success - ${{ github.workflow }}"
+          subject: "✅ Pipeline Success - ${{ github.workflow }}"
           body: |
-            <html>
-            <body style="font-family: Arial, sans-serif; background-color: #f2f2f2; padding: 20px;">
-                <div style="background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
-                    <h2 style="color: green;">Pipeline Succeeded!</h2>
-                    <p><strong>Workflow:</strong> ${{ github.workflow }}</p>
-                    <p><strong>Run Number:</strong> ${{ github.run_number }}</p>
-                    <p>Check the <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">Actions logs</a> for more details.</p>
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <style>
+                body {
+                  background: #e0f7fa;
+                  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                  padding: 40px;
+                }
+                .card {
+                  background: white;
+                  border-radius: 16px;
+                  max-width: 600px;
+                  margin: 0 auto;
+                  padding: 30px;
+                  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                  text-align: center;
+                  animation: float 2s ease-in-out infinite alternate;
+                }
+                @keyframes float {
+                  0% { transform: translateY(0px); }
+                  100% { transform: translateY(-6px); }
+                }
+                .checkmark {
+                  width: 100px;
+                  height: 100px;
+                  margin: 0 auto 20px;
+                }
+                svg circle {
+                  fill: none;
+                  stroke: #4CAF50;
+                  stroke-width: 6;
+                  animation: circle 1s ease-out forwards;
+                }
+                @keyframes circle {
+                  from { stroke-dasharray: 0 300; }
+                  to { stroke-dasharray: 300 0; }
+                }
+                svg path {
+                  stroke: #4CAF50;
+                  stroke-width: 6;
+                  stroke-linecap: round;
+                  stroke-linejoin: round;
+                  fill: none;
+                  stroke-dasharray: 50;
+                  stroke-dashoffset: 50;
+                  animation: check 1s ease forwards 1s;
+                }
+                @keyframes check {
+                  to { stroke-dashoffset: 0; }
+                }
+                h1 {
+                  color: #2e7d32;
+                  font-size: 26px;
+                }
+                p {
+                  color: #374151;
+                  font-size: 15px;
+                }
+                a.button {
+                  background: linear-gradient(135deg, #43cea2, #185a9d);
+                  color: white;
+                  padding: 10px 20px;
+                  border-radius: 8px;
+                  text-decoration: none;
+                  font-weight: 600;
+                  display: inline-block;
+                  margin-top: 18px;
+                }
+              </style>
+            </head>
+            <body>
+              <div class="card">
+                <div class="checkmark">
+                  <svg viewBox="0 0 52 52">
+                    <circle cx="26" cy="26" r="25" />
+                    <path d="M14 27l7 7 16-16"/>
+                  </svg>
                 </div>
+                <h1>✅ Pipeline Succeeded!</h1>
+                <p><strong>Workflow:</strong> ${{ github.workflow }}</p>
+                <p><strong>Run Number:</strong> ${{ github.run_number }}</p>
+                <a class="button" href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">
+                  🔍 View Full Logs
+                </a>
+              </div>
             </body>
             </html>
           to: kunjbhuva301@gmail.com
           from: kunjbhuva.me@gmail.com
           content_type: text/html
 
-      # ❌ Failure Email
+      # ❌ Failure Email (Animated Red Design)
       - name: Send Failure Email
         if: failure()
         uses: dawidd6/action-send-mail@v3
@@ -75,16 +154,96 @@ jobs:
           server_port: 587
           username: ${{ secrets.SMTP_USER }}
           password: ${{ secrets.SMTP_PASS }}
-          subject: "❌ GitHub Actions Pipeline Failed - ${{ github.workflow }}"
+          subject: "❌ Pipeline Failed - ${{ github.workflow }}"
           body: |
-            <html>
-            <body style="font-family: Arial, sans-serif; background-color: #f2f2f2; padding: 20px;">
-                <div style="background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
-                    <h2 style="color: red;">Pipeline Failed!</h2>
-                    <p><strong>Workflow:</strong> ${{ github.workflow }}</p>
-                    <p><strong>Run Number:</strong> ${{ github.run_number }}</p>
-                    <p>Check the <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">Actions logs</a> for details.</p>
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <style>
+                body {
+                  background: #ffe5e5;
+                  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                  padding: 40px;
+                }
+                .card {
+                  background: white;
+                  border-radius: 16px;
+                  max-width: 600px;
+                  margin: 0 auto;
+                  padding: 30px;
+                  box-shadow: 0 10px 30px rgba(255,0,0,0.1);
+                  text-align: center;
+                  animation: shake 0.5s ease-in-out;
+                }
+                @keyframes shake {
+                  0%, 100% { transform: translateX(0); }
+                  25% { transform: translateX(-6px); }
+                  75% { transform: translateX(6px); }
+                }
+                .crossmark {
+                  width: 100px;
+                  height: 100px;
+                  margin: 0 auto 20px;
+                }
+                svg circle {
+                  fill: none;
+                  stroke: #e53935;
+                  stroke-width: 6;
+                  animation: circle 1s ease-out forwards;
+                }
+                @keyframes circle {
+                  from { stroke-dasharray: 0 300; }
+                  to { stroke-dasharray: 300 0; }
+                }
+                svg path {
+                  stroke: #e53935;
+                  stroke-width: 6;
+                  stroke-linecap: round;
+                  stroke-linejoin: round;
+                  fill: none;
+                  stroke-dasharray: 40;
+                  stroke-dashoffset: 40;
+                  animation: cross 1s ease forwards 1s;
+                }
+                @keyframes cross {
+                  to { stroke-dashoffset: 0; }
+                }
+                h1 {
+                  color: #b91c1c;
+                  font-size: 26px;
+                }
+                p {
+                  color: #374151;
+                  font-size: 15px;
+                }
+                a.button {
+                  background: linear-gradient(135deg, #ef5350, #c62828);
+                  color: white;
+                  padding: 10px 20px;
+                  border-radius: 8px;
+                  text-decoration: none;
+                  font-weight: 600;
+                  display: inline-block;
+                  margin-top: 18px;
+                }
+              </style>
+            </head>
+            <body>
+              <div class="card">
+                <div class="crossmark">
+                  <svg viewBox="0 0 52 52">
+                    <circle cx="26" cy="26" r="25" />
+                    <path d="M16 16l20 20M36 16L16 36" />
+                  </svg>
                 </div>
+                <h1>❌ Pipeline Failed!</h1>
+                <p><strong>Workflow:</strong> ${{ github.workflow }}</p>
+                <p><strong>Run Number:</strong> ${{ github.run_number }}</p>
+                <a class="button" href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">
+                  🔍 View Failure Logs
+                </a>
+              </div>
             </body>
             </html>
           to: kunjbhuva301@gmail.com
