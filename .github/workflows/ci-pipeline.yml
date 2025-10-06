@@ -62,8 +62,8 @@ jobs:
                 </div>
             </body>
             </html>
-          to: your_email@gmail.com
-          from: your_email@gmail.com
+          to: kunjbhuva301@gmail.com
+          from: kunjbhuva.me@gmail.com
           content_type: text/html
 
       # ❌ Failure Email
@@ -87,7 +87,7 @@ jobs:
                 </div>
             </body>
             </html>
-          to: your_email@gmail.com
-          from: your_email@gmail.com
+          to: kunjbhuva301@gmail.com
+          from: kunjbhuva.me@gmail.com
           content_type: text/html
 
