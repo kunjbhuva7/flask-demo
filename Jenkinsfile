@@ -17,10 +17,10 @@ pipeline {
         stage('Build Docker Image (Simulated)') {
             steps {
                 sh '''
-                echo "----------------------------------------"
-                echo "Simulating Docker build..."
-                echo "docker build -t $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER ."
-                echo "----------------------------------------"
+                    echo "----------------------------------------"
+                    echo "Simulating Docker build..."
+                    echo "docker build -t $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER ."
+                    echo "----------------------------------------"
                 '''
             }
         }
@@ -28,26 +28,24 @@ pipeline {
         stage('Scan with Trivy (Simulated)') {
             steps {
                 sh '''
-                echo "----------------------------------------"
-                echo "Simulating Trivy scan on $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER"
-                echo "trivy image $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER"
-                echo "----------------------------------------"
+                    echo "----------------------------------------"
+                    echo "Simulating Trivy scan on $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER"
+                    echo "trivy image $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER"
+                    echo "----------------------------------------"
                 '''
             }
         }
 
         stage('Push to DockerHub (Simulated)') {
             steps {
-                withCredentials([string(credentialsId: 'dockerhub-pass', variable: 'DOCKER_PASS')]) {
-                    sh '''
-                    echo "----------------------------------------"
-                    echo "Simulating Docker login..."
-                    echo "docker login -u $DOCKERHUB_USER --password-stdin"
-                    echo "Simulating docker push $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER"
-                    echo "Simulating docker tag $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER $DOCKERHUB_USER/$IMAGE_NAME:latest"
-                    echo "Simulating docker push latest"
-                    echo "----------------------------------------"
-                    '''
+                script {
+                    if (env.DOCKER_PASS) {
+                        echo "Simulating Docker login and push..."
+                        echo "docker login -u $DOCKERHUB_USER --password-stdin <<< $DOCKER_PASS"
+                        echo "docker push $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER"
+                    } else {
+                        echo "Skipping Docker push simulation (credential not found)"
+                    }
                 }
             }
         }
@@ -55,9 +53,9 @@ pipeline {
         stage('Deploy to Kubernetes (Simulated)') {
             steps {
                 sh '''
-                echo "----------------------------------------"
-                echo "Simulating kubectl apply -f deployment.yaml"
-                echo "----------------------------------------"
+                    echo "----------------------------------------"
+                    echo "Simulating kubectl apply -f deployment.yaml"
+                    echo "----------------------------------------"
                 '''
             }
         }
