@@ -18,103 +18,121 @@ jobs:
         run: |
           echo "Simulating Docker build..."
           sleep 2
+      
       - name: Simulate Trivy Scan
         run: |
           echo "Scanning image..."
           sleep 2
+      
       - name: Simulate Docker Push
         run: |
           echo "Pushing image..."
           sleep 2
+      
       - name: Simulate Deploy
         run: |
           echo "Deploying to cluster..."
           sleep 2
 
-      # ✅ SUCCESS EMAIL (Styled)
+      # ✅ SUCCESS EMAIL (New Design Based on Image)
       - name: Send Success Email
         if: success()
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 587
+          secure: true
           username: ${{ secrets.SMTP_USER }}
           password: ${{ secrets.SMTP_PASS }}
           subject: "✅ Pipeline Success - ${{ github.repository }}"
           to: kunjbhuva301@gmail.com
           from: kunjbhuva.me@gmail.com
           content_type: text/html
-          body: >
+          body: |
             <!DOCTYPE html>
             <html>
             <head>
+              <meta charset="UTF-8">
               <style>
                 body {
-                  background: linear-gradient(135deg, #43e97b, #38f9d7);
                   font-family: Arial, sans-serif;
-                  color: #fff;
+                  background-color: #f5f5f5;
+                  margin: 0;
+                  padding: 20px;
+                }
+                .container {
+                  max-width: 600px;
+                  margin: 0 auto;
+                  background: white;
+                  padding: 20px;
+                  border-radius: 8px;
+                  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                }
+                .success-bar {
+                  background-color: #28a745;
+                  color: white;
+                  padding: 10px;
                   text-align: center;
-                  padding: 40px;
+                  font-size: 16px;
+                  border-radius: 4px 4px 0 0;
                 }
-                .box {
-                  background: rgba(255,255,255,0.1);
-                  padding: 30px;
-                  border-radius: 12px;
-                  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-                  display: inline-block;
-                  animation: fadeIn 2s ease;
-                }
-                @keyframes fadeIn {
-                  from { opacity: 0; transform: scale(0.9); }
-                  to { opacity: 1; transform: scale(1); }
+                .content {
+                  padding: 20px;
+                  text-align: center;
                 }
                 h1 {
-                  font-size: 28px;
-                  margin-bottom: 10px;
+                  color: #333;
+                  font-size: 18px;
+                  margin: 0 0 10px;
                 }
                 p {
-                  font-size: 16px;
+                  color: #666;
+                  font-size: 14px;
+                  margin: 10px 0;
                 }
-                a {
-                  background: white;
-                  color: #0072ff;
-                  padding: 10px 20px;
-                  border-radius: 8px;
-                  text-decoration: none;
-                  font-weight: bold;
+                a.button {
                   display: inline-block;
-                  margin-top: 15px;
-                }
-                a:hover {
-                  background: #0072ff;
+                  background-color: #007bff;
                   color: white;
+                  padding: 10px 20px;
+                  text-decoration: none;
+                  border-radius: 5px;
+                  font-size: 14px;
+                  font-weight: bold;
+                }
+                a.button:hover {
+                  background-color: #0056b3;
                 }
               </style>
             </head>
             <body>
-              <div class="box">
-                <h1>🎉 Pipeline Succeeded!</h1>
-                <p><b>Repository:</b> ${{ github.repository }}</p>
-                <p><b>Run Number:</b> ${{ github.run_number }}</p>
-                <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Build Logs</a>
+              <div class="container">
+                <div class="success-bar">Success! Something good happened.</div>
+                <div class="content">
+                  <h1>Hi Ringo,</h1>
+                  <p>Congratulations! Something good has happened.</p>
+                  <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" class="button">Take Action Now</a>
+                  <p>Thanks for being a great customer. Let it be!</p>
+                </div>
               </div>
             </body>
             </html>
 
-      # ❌ FAILURE EMAIL (Styled)
+      # ❌ FAILURE EMAIL (Unchanged)
       - name: Send Failure Email
         if: failure()
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 587
+          secure: true
           username: ${{ secrets.SMTP_USER }}
           password: ${{ secrets.SMTP_PASS }}
           subject: "❌ Pipeline Failed - ${{ github.repository }}"
           to: kunjbhuva301@gmail.com
           from: kunjbhuva.me@gmail.com
           content_type: text/html
-          body: >
+          body: |
             <!DOCTYPE html>
             <html>
             <head>
@@ -167,4 +185,3 @@ jobs:
               </div>
             </body>
             </html>
-
