@@ -15,16 +15,30 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-		sh '''
-		docker run --rm --privileged -v $(pwd):/app -w /app docker:20.10.24-dind \
-		sh -c "dockerd-entrypoint.sh & sleep 5; docker build -t kunj22/flask-demo:$BUILD_NUMBER ."
-		'''
+                sh '''
+                # Run DinD container in background
+                docker run --rm --privileged --name dind-temp -d docker:20.10.24-dind
+                echo "Waiting for Docker daemon to start..."
+                sleep 10
+
+                # Copy current code to DinD container
+                docker cp . dind-temp:/app
+
+                # Build Docker image inside DinD container
+                docker exec dind-temp docker build -t $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER /app
+
+                # Stop DinD container
+                docker stop dind-temp || true
+                '''
             }
         }
 
         stage('Scan with Trivy') {
             steps {
-                sh 'trivy image $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER || true'
+                sh '''
+                # Optional: Run Trivy inside a container
+                docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image $DOCKERHUB_USER/$IMAGE_NAME:$BUILD_NUMBER || true
+                '''
             }
         }
 
